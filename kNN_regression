@@ -1,0 +1,30 @@
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import mglearn
+import numpy as np
+
+X, y = mglearn.datasets.make_wave(n_samples=40)
+
+#split the wave dataset into training and a test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+
+training_accuracy = []
+test_accuracy = []
+
+neighbors_settings = range (1,31)
+for n_neighbors in neighbors_settings:
+    #instantiate the model and set the number of neighbors to consider to 3
+    reg=KNeighborsRegressor(n_neighbors=n_neighbors)
+    #fit the model using the training data and training targets
+    reg.fit(X_train, y_train)
+    training_accuracy.append(reg.score(X_train, y_train))
+    #record generalization accuracy
+    test_accuracy.append(reg.score(X_test, y_test))
+    
+plt.plot(neighbors_settings, training_accuracy, label = "training accuracy")
+plt.plot(neighbors_settings, test_accuracy, label = "test accuracy")
+plt.ylabel("Accuracy")
+plt.xlabel("n_neighbors")
+plt.legend()
+plt.show()
